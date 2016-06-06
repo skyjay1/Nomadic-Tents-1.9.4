@@ -27,9 +27,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockTentFrame extends BlockUnbreakable implements IFrameBlock
 {
-	public static final int NUM_TEXTURES = 4;
+	public static final int MAX_META = 7;
 	public static final int CONSTRUCT_DAMAGE = 1;
-	public static final PropertyInteger PROGRESS = PropertyInteger.create("progress", 0, NUM_TEXTURES - 1);
+	public static final PropertyInteger PROGRESS = PropertyInteger.create("progress", 0, MAX_META);
 
 	public static final AxisAlignedBB AABB_PROGRESS_0 = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D);
 	public static final AxisAlignedBB AABB_PROGRESS_1 = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
@@ -65,12 +65,12 @@ public class BlockTentFrame extends BlockUnbreakable implements IFrameBlock
 	@Deprecated // because super method is
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
-		int meta = state.getValue(PROGRESS);
-		if(meta == 0)
+		int meta = state.getValue(PROGRESS).intValue();
+		if(meta <= 1)
 		{
 			return AABB_PROGRESS_0;
 		}
-		else if(meta <= NUM_TEXTURES / 2)
+		else if(meta <= MAX_META / 2)
 		{
 			return AABB_PROGRESS_1;
 		}
@@ -132,19 +132,25 @@ public class BlockTentFrame extends BlockUnbreakable implements IFrameBlock
 	@Override
 	public IBlockState getStateFromMeta(int meta) 
 	{
-		return getDefaultState().withProperty(this.PROGRESS, meta % NUM_TEXTURES);
+		return getDefaultState().withProperty(this.PROGRESS, top(meta, MAX_META));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) 
 	{
-		return ((Integer)state.getValue(this.PROGRESS)).intValue();
+		return state.getValue(this.PROGRESS).intValue();
 	}
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state)
 	{
 		return false;
+	}
+	
+	/** @return the number by which to increment PROGRESS **/
+	public int getEffectiveness(World worldIn, BlockPos pos, ItemStack mallet, EntityPlayer player)
+	{
+		return 2;
 	}
 
 	public boolean becomeReal(World worldIn, BlockPos pos, ItemStack mallet, EntityPlayer player)
@@ -156,11 +162,9 @@ public class BlockTentFrame extends BlockUnbreakable implements IFrameBlock
 	public boolean onMalletUsed(World worldIn, BlockPos pos, IBlockState state, ItemStack mallet, EntityPlayer player)
 	{
 		int meta = this.getMetaFromState(state);
-		if(meta < NUM_TEXTURES - 1)
-		{
-			worldIn.setBlockState(pos, this.getStateFromMeta(meta + 1), 3);
-		}
-		else
+		int nextMeta = meta + getEffectiveness(worldIn, pos, mallet, player);
+		worldIn.setBlockState(pos, this.getDefaultState().withProperty(PROGRESS, top(nextMeta, MAX_META)), 3);
+		if(nextMeta >= MAX_META)
 		{
 			this.becomeReal(worldIn, pos, mallet, player);
 		}
@@ -186,6 +190,11 @@ public class BlockTentFrame extends BlockUnbreakable implements IFrameBlock
 			}
 		}
 		return true;
+	}
+	
+	public int top(int in, int max)
+	{
+		return in > max ? max : in;
 	}
 
 	public static enum BlockToBecome

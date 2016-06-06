@@ -120,7 +120,7 @@ public enum StructureType
 	
 	public static String getName(int metadata)
 	{
-		return StructureType.values()[metadata].toString().toLowerCase();
+		return get(metadata).toString().toLowerCase();
 	}
 	
 	public static StructureType get(int meta)

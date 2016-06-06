@@ -53,6 +53,5 @@ public class NomadicTents
 		{
 			MinecraftForge.EVENT_BUS.register(new TentSleepHandler());
 		}
-		proxy.registerRenders();
     }
 }
