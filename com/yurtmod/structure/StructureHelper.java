@@ -22,6 +22,8 @@ public class StructureHelper
 	public static final int FLOOR_Y = 70;
 	/** Default facing for all tent structures in Tent Dimension **/
 	public static final EnumFacing STRUCTURE_DIR = EnumFacing.EAST;
+	/** Tent ItemStack NBTs should have this value for x and z offsets **/
+	public static final int ERROR_TAG = Short.MIN_VALUE;
 	
 
 	/** Handles the structure type to call the correct {@code canSpawnHere} functions. Currently only handles *_SMALL **/

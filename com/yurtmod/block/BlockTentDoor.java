@@ -57,7 +57,7 @@ public class BlockTentDoor extends BlockUnbreakable implements ITileEntityProvid
 				EnumFacing dir = TentDimension.isTentDimension(worldIn) ? StructureHelper.STRUCTURE_DIR : StructureHelper.isValidStructure(worldIn, struct, base);
 				if(dir == null) return false;
 				// deconstruct the tent if the player uses a tentHammer on the door (and in overworld and with fully built tent)
-				if(player.getHeldItem(hand) != null && player.getHeldItem(hand).getItem() instanceof ItemMallet && worldIn.provider.getDimension() != TentDimension.DIMENSION_ID)
+				if(player.getHeldItem(hand) != null && player.getHeldItem(hand).getItem() instanceof ItemMallet && !TentDimension.isTentDimension(worldIn))
 				{
 					// prepare a tent item to drop
 					ItemStack toDrop = struct.getDropStack(teyd.getOffsetX(), teyd.getOffsetZ());

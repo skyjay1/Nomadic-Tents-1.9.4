@@ -72,11 +72,11 @@ public class ItemTent extends Item
 		}
 		if(!stack.getTagCompound().hasKey(OFFSET_X))
 		{
-			stack.getTagCompound().setInteger(OFFSET_X, Short.MIN_VALUE);
+			stack.getTagCompound().setInteger(OFFSET_X, StructureHelper.ERROR_TAG);
 		}
 		if(!stack.getTagCompound().hasKey(OFFSET_Z))
 		{
-			stack.getTagCompound().setInteger(OFFSET_Z, Short.MIN_VALUE);
+			stack.getTagCompound().setInteger(OFFSET_Z, StructureHelper.ERROR_TAG);
 		}
 	}
 
@@ -167,7 +167,7 @@ public class ItemTent extends Item
 	{
 		for(StructureType type : StructureType.values())
 		{
-			ItemStack tent = type.getDropStack(-1, -1 - type.ordinal());
+			ItemStack tent = type.getDropStack(StructureHelper.ERROR_TAG, StructureHelper.ERROR_TAG);
 			subItems.add(tent);
 		}
 	}
@@ -197,7 +197,7 @@ public class ItemTent extends Item
 	{
 		if(stack.getTagCompound() != null) 
 		{
-			return stack.getTagCompound().getInteger(OFFSET_X) == Short.MIN_VALUE && stack.getTagCompound().getInteger(OFFSET_Z) == Short.MIN_VALUE;
+			return stack.getTagCompound().getInteger(OFFSET_X) == StructureHelper.ERROR_TAG && stack.getTagCompound().getInteger(OFFSET_Z) == StructureHelper.ERROR_TAG;
 		}
 		return true;
 	}

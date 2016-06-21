@@ -37,7 +37,8 @@ public class WorldProviderTent extends WorldProvider
 	@Override
 	public boolean canRespawnHere()
 	{
-		return Config.ALLOW_RESPAWN_TENT_DIM;
+		// returning false from here makes beds explode when you try to sleep
+		return Config.ALLOW_RESPAWN_TENT_DIM || Config.ALLOW_SLEEP_TENT_DIM;
 	}
 
 	@Override

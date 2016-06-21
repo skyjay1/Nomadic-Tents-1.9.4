@@ -1,5 +1,7 @@
 package com.yurtmod.init;
 
+import java.io.File;
+
 import com.yurtmod.dimension.TentDimension;
 import com.yurtmod.event.TentSleepHandler;
 import com.yurtmod.proxies.CommonProxy;
@@ -13,7 +15,6 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid = NomadicTents.MODID, name = NomadicTents.NAME, version = NomadicTents.VERSION, acceptedMinecraftVersions = NomadicTents.MCVERSION)
 public class NomadicTents 
@@ -39,7 +40,8 @@ public class NomadicTents
 				return Content.ITEM_TENT;
 			}
 		};
-		Config.mainRegistry(new Configuration(event.getSuggestedConfigurationFile()));
+		String path = event.getSuggestedConfigurationFile().getAbsolutePath().replaceFirst(MODID + ".cfg", "NomadicTents.cfg");
+		Config.mainRegistry(new Configuration(new File(path)));
 		Content.mainRegistry();
 		TentDimension.mainRegistry();
 		proxy.preInitRenders();
@@ -49,7 +51,7 @@ public class NomadicTents
     public void init(FMLInitializationEvent event)
     {    
 		Crafting.mainRegistry();
-		if(Config.ALLOW_SLEEP_TENT_DIM)
+		if(Config.SLEEP_TO_DAY_IN_TENT_DIM)
 		{
 			MinecraftForge.EVENT_BUS.register(new TentSleepHandler());
 		}

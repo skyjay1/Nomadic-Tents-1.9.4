@@ -22,13 +22,15 @@ public enum StructureType
 	BEDOUIN_MEDIUM(7, 3),
 	BEDOUIN_LARGE(9, 4);
 	
-	private int squareWidth;
-	private int doorOffsetZ;
+	private final int squareWidth;
+	private final int doorOffsetZ;
+	public final String registryName;
 	
 	private StructureType(int sqWidth, int doorZ)
 	{
 		this.squareWidth = sqWidth;
 		this.doorOffsetZ = doorZ;
+		this.registryName = this.toString().toLowerCase();
 	}
 	
 	/** @return square width of the structure **/
@@ -69,7 +71,7 @@ public enum StructureType
 		
 		int offsetx = stack.getTagCompound().getInteger(ItemTent.OFFSET_X);
 		int offsetz = stack.getTagCompound().getInteger(ItemTent.OFFSET_Z);
-		te.setStructureType(StructureType.values()[stack.getItemDamage() % StructureType.values().length]);
+		te.setStructureType(get(stack.getItemDamage()));
 		te.setOffsetX(offsetx);
 		te.setOffsetZ(offsetz);
 		te.setOverworldXYZ(player.posX, player.posY, player.posZ);
@@ -102,17 +104,17 @@ public enum StructureType
 	{
 		switch(this.getSqWidth())
 		{
-		case 5:		return TextFormatting.RED;
-		case 7:		return TextFormatting.BLUE;
-		case 9:		return TextFormatting.GREEN;
+		case 5:		return TextFormatting.RED;		// name: SMALL
+		case 7:		return TextFormatting.BLUE;		// name: MEDIUM
+		case 9:		return TextFormatting.GREEN;	// name: LARGE
 		// the following are not used now but might be later
-		case 11:	return TextFormatting.YELLOW;
-		case 13:	return TextFormatting.AQUA;
-		case 15:	return TextFormatting.LIGHT_PURPLE;
+		case 11:	return TextFormatting.YELLOW;	// name: HUGE
+		case 13:	return TextFormatting.AQUA;		// name: 
+		case 15:	return TextFormatting.LIGHT_PURPLE; // name: 
 		}
 		return TextFormatting.GRAY;
 	}
-	
+
 	public static String getName(ItemStack stack)
 	{
 		return getName(stack.getItemDamage());
@@ -120,7 +122,7 @@ public enum StructureType
 	
 	public static String getName(int metadata)
 	{
-		return get(metadata).toString().toLowerCase();
+		return get(metadata).registryName;
 	}
 	
 	public static StructureType get(int meta)

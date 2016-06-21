@@ -1,5 +1,6 @@
 package com.yurtmod.init;
 
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.config.Configuration;
 
 public class Config 
@@ -28,7 +29,10 @@ public class Config
 	public static int TEPEE_DECORATED_CHANCE;
 	
 	public static boolean ALLOW_SLEEP_TENT_DIM;
+	public static boolean SLEEP_TO_DAY_IN_TENT_DIM;
 	public static boolean ALLOW_RESPAWN_TENT_DIM;
+	
+	public static int DIM_ID;
 
 	private static final String C_TEPEE_WALL = "wall_piece_tepee";
 	private static final String C_YURT_WALL = "wall_piece_yurt";
@@ -81,10 +85,14 @@ public class Config
 
 		TEPEE_DECORATED_CHANCE = config.getInt("Tepee Design Chance", Configuration.CATEGORY_GENERAL, 35, 0, 100, 
 				"Percentage chance that a plain tepee block will randomly have a design");
-		ALLOW_SLEEP_TENT_DIM = config.getBoolean("Reset time from Tent dim", Configuration.CATEGORY_GENERAL, true, 
+		SLEEP_TO_DAY_IN_TENT_DIM = config.getBoolean("Reset time from Tent dim", Configuration.CATEGORY_GENERAL, true, 
 				"When true, waking up in Tent Dimension will reset the time for overworld and tent dim");
-		ALLOW_RESPAWN_TENT_DIM = config.getBoolean("Respawn in Tent dim", Configuration.CATEGORY_GENERAL, true, 
+		ALLOW_SLEEP_TENT_DIM = !config.getBoolean("Beds explode in Tent Dim", Configuration.CATEGORY_GENERAL, false, 
+				"When true, beds used in the Tent Dimension will explode");
+		ALLOW_RESPAWN_TENT_DIM = config.getBoolean("Respawn in Tent dim", Configuration.CATEGORY_GENERAL, false, 
 				"When true, players who die in the Tent dim can respawn there");
+		DIM_ID = config.getInt("Tent Dimension ID", Configuration.CATEGORY_GENERAL, DimensionManager.getNextFreeDimId(), -255, 255, 
+				"The ID for the Tent Dimension. Delete this field whenever you add/remove a dimension-adding mod");
 
 		config.save();
 	}
